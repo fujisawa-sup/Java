@@ -1,4 +1,4 @@
-package main;
+package main.machine;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -6,7 +6,7 @@ import java.io.InputStreamReader;
 import java.sql.SQLException;
 import java.util.List;
 
-import product.Product;
+import main.database.Product;
 
 public class ProductSelectPhase{
 

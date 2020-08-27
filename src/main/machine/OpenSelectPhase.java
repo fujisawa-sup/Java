@@ -1,10 +1,11 @@
-package main;
+package main.machine;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-import product.Product;
+import main.database.DatabaseAccess;
+import main.database.Product;
 
 public class OpenSelectPhase {
 

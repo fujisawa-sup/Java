@@ -1,4 +1,4 @@
-package main;
+package main.machine;
 
 public enum SentakuComand {
 

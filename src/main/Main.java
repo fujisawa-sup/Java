@@ -2,8 +2,16 @@ package main;
 
 import java.sql.SQLException;
 
-import kane.Kane;
-import product.Product;
+import main.database.DatabaseAccess;
+import main.database.Kane;
+import main.database.Product;
+import main.database.ZaikoDao;
+import main.machine.ActionSelectPhase;
+import main.machine.AmountInputPhase;
+import main.machine.Hontai;
+import main.machine.OpenSelectPhase;
+import main.machine.ProductSelectPhase;
+import main.machine.Zaiko;
 
 public class Main {
 

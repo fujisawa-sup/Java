@@ -1,4 +1,4 @@
-package main;
+package main.machine;
 
 import static org.junit.jupiter.api.Assertions.*;
 

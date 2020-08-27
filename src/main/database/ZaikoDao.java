@@ -1,4 +1,4 @@
-package main;
+package main.database;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -6,6 +6,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+
+import main.machine.Zaiko;
 
 
 public class ZaikoDao {

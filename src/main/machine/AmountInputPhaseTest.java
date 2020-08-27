@@ -1,4 +1,4 @@
-package main;
+package main.machine;
 
 import org.junit.Before;
 import org.junit.jupiter.api.Test;

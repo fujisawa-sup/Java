@@ -1,11 +1,9 @@
-package kane;
+package main.database;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-
-import main.DatabaseAccess;
 
 public class Kane {
 
