@@ -8,14 +8,12 @@ import java.util.List;
 
 public class Product {
 
-
 	private DatabaseAccess dba;
 
 	public void setDBA(DatabaseAccess dba) {
 		// TODO 自動生成されたメソッド・スタブ
 		this.dba = dba;
 	}
-
 
 	//フィールド変数
 	private int id;//商品のid
@@ -26,50 +24,55 @@ public class Product {
 
 	//コンストラクタ
 	//public Product(String name ,int price, int nokori, String detail,String comment) {
-        //this.name = name;
-        //this.price = price;
-        //this.nokori = nokori;
-        //this.detail = detail;
-        //this.comment = comment;
-    //}
+	//this.name = name;
+	//this.price = price;
+	//this.nokori = nokori;
+	//this.detail = detail;
+	//this.comment = comment;
+	//}
 
 	public int getId() {
 		return id;
 	}
+
 	public void setId(int id) {
 		this.id = id;
 	}
+
 	public String getName() {
 		return name;
 	}
+
 	public void setName(String name) {
 		this.name = name;
 	}
+
 	public int getPrice() {
 		return price;
 	}
+
 	public void setPrice(int price) {
 		this.price = price;
 	}
+
 	public String getDetail() {
 		return detail;
 	}
+
 	public void setDetail(String detail) {
 		this.detail = detail;
 	}
+
 	public String getComment() {
 		return comment;
 	}
+
 	public void setComment(String comment) {
 		this.comment = comment;
 	}
 
-
-
-
 	//商品情報が入ったリスト
 	List<Product> data = new ArrayList<Product>();
-
 
 	/**
 	 * 商品情報セット
@@ -78,31 +81,29 @@ public class Product {
 	 */
 	public void setInfo() throws SQLException {
 
+		// SQLステートメント取得
+		Statement st = dba.getStatement();
 
-				// SQLステートメント取得
-				Statement st = dba.getStatement();
+		// SQLの実行
+		String sql = "select id, name, price, detail, comment from product;";
+		ResultSet rset = st.executeQuery(sql);
 
-				// SQLの実行
-				String sql = "select id, name, price, detail, comment from product;";
-				ResultSet rset = st.executeQuery(sql);
+		while (rset.next()) {
 
-				while(rset.next()) {
+			Product hako = new Product();
 
-					Product hako = new Product();
+			hako.setId(rset.getInt("id"));
+			hako.setName(rset.getString("name"));
+			hako.setPrice(rset.getInt("price"));
+			hako.setDetail(rset.getString("detail"));
+			hako.setComment(rset.getString("comment"));
 
-					hako.setId(rset.getInt("id"));
-					hako.setName(rset.getString("name"));
-					hako.setPrice(rset.getInt("price"));
-					hako.setDetail(rset.getString("detail"));
-					hako.setComment(rset.getString("comment"));
+			data.add(hako);
 
-					data.add(hako);
-
-				}
+		}
 
 		return;
 	}
-
 
 	/**
 	 * 商品リスト取得
@@ -112,8 +113,6 @@ public class Product {
 		return data;
 	}
 
-
-
 	/**
 	 * 選択した商品の値段を取得
 	 * @param id
@@ -122,7 +121,7 @@ public class Product {
 	public int getSelectPrice(int id) {
 		int nedan = 0;
 		//hinbanとidが一致するリスト要素を探索
-		for (int i = 0 ; i < data.size() ; i++) {
+		for (int i = 0; i < data.size(); i++) {
 
 			//hinbanとidが一致したら在庫数を設定
 			if (data.get(i).getId() == id) {
@@ -140,7 +139,7 @@ public class Product {
 	public String getSelectName(int selectid) {
 		String na = "";
 		//hinbanとidが一致するリスト要素を探索
-		for (int i = 0 ; i < data.size() ; i++) {
+		for (int i = 0; i < data.size(); i++) {
 
 			//hinbanとidが一致したら在庫数を設定
 			if (data.get(i).getId() == selectid) {
@@ -149,6 +148,5 @@ public class Product {
 		}
 		return na;
 	}
-
 
 }

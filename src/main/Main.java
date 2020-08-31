@@ -46,7 +46,6 @@ public class Main {
 		zdao.setDBA(dba);
 		zai.setZDAO(zdao);
 		//在庫情報セット
-		zdao.setZaiko();
 		zai.getZaiko();
 		//pspにzaiをセット
 		psp.setZai(zai);

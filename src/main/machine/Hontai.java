@@ -4,13 +4,11 @@ import java.sql.SQLException;
 
 public class Hontai {
 
-
 	private ProductSelectPhase psp;
 	private ActionSelectPhase asp;
 	private AmountInputPhase aip;
 	private OpenSelectPhase osp;
 	private Zaiko zai;
-
 
 	public void setps(ProductSelectPhase psp) {
 		// TODO 自動生成されたメソッド・スタブ
@@ -37,35 +35,25 @@ public class Hontai {
 		this.zai = zai;
 	}
 
-
-	//選択された商品の在庫数
-	public int selectzaiko;
-
 	//選択された商品ID
 	int selected = 0;
 
-
 	public void menuMain() throws SQLException {
 
-	//trueな限りループ
-	boolean flg = true;
-	while (flg) {
+		//trueな限りループ
+		boolean flg = true;
+		while (flg) {
 
-		//行動選択
-		SentakuComand temp = asp.Main();
+			//行動選択
+			SentakuComand temp = asp.Main();
 
-		switch (temp) {
-		//入金
-		case PayIn:
+			switch (temp) {
+			//入金
+			case PayIn:
 
-			//商品選択されているか
-			if (selected != 0) {
+				//商品選択されているか
+				if (selected != 0) {
 
-				//選択商品の在庫有無を確認
-				int arunashi = zai.zaikoumu(selected);
-
-				//在庫があった時
-				if (arunashi == 0) {
 					//商品の金額取得して入金へ
 					aip.Main(selected);
 
@@ -74,62 +62,69 @@ public class Hontai {
 
 					//開封画面へ
 					osp.Main(selected);
+
+					//選択状態の解除
+					selected = 0;
+
+				} else {
+					//入金のみ
+					aip.ruikei();
+				}
+				break;
+
+			//商品選択
+			case Choose:
+
+				//現・在庫状態の取得
+				zai.getZaiko();
+
+				//選択された商品番号
+				selected = psp.main();
+
+				//選択された商品の在庫有無
+				int selectzaiko = zai.zaikoumu(selected);
+
+				//在庫がないとき
+				if (selectzaiko == -1) {
+					System.out.println("売切れです");
+					//選択状態の解除
+					selected = 0;
 				}
 
+				break;
+
+			//補充
+			case InItem:
+
+				//現・在庫状態の取得
+				zai.getZaiko();
+
+				//選択された商品ID
+				selected = psp.main();
+
+				//選択された商品の在庫数を任意の数増やす
+				psp.fuyasu(selected);
+
 				//選択状態の解除
 				selected = 0;
 
-			}else {
-				aip.ruikei();
-			}
-			break;
+				break;
 
-		//商品選択
-		case Choose:
+			//終了
+			case Exit:
+				flg = false;
 
-			//選択された商品番号
-			selected = psp.main();
+				System.out.println("ご利用ありがとうございました。");
+				System.out.println("またのご利用をお待ちしております。");
 
-			//選択された商品の在庫数取得
-			selectzaiko = psp.choizai(selected);
-
-			if (selectzaiko<1) {
-				System.out.println("売切れです");
-				//選択状態の解除
-				selected = 0;
+				break;
+			default:
+				;
+				break;
 			}
 
-			break;
-
-		//補充
-		case InItem:
-
-			//選択された商品ID
-			selected = psp.main();
-
-			//選択された商品の在庫数を任意の数増やす
-			psp.fuyasu(selected);
-
-			//選択状態の解除
-			selected = 0;
-
-			break;
-
-		//終了
-		case Exit:
-			flg = false;
-
-			System.out.println("ご利用ありがとうございました。");
-			System.out.println("またのご利用をお待ちしております。");
-
-			break;
-		default:
-			;
-			break;
 		}
 
 	}
-
-}
 
 }

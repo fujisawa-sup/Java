@@ -9,9 +9,7 @@ import java.util.List;
 
 import main.machine.Zaiko;
 
-
 public class ZaikoDao {
-
 
 	private DatabaseAccess dba;
 
@@ -20,48 +18,40 @@ public class ZaikoDao {
 		this.dba = dba;
 	}
 
-	//在庫情報が入ったリスト
-	List<Zaiko> data = new ArrayList<Zaiko>();
-
-
 	/**
 	 * 在庫情報セット(最初だけ)
-	 * @return
+	 * @return data
 	 * @throws SQLException
 	 */
-	public void setZaiko() throws SQLException {
+	public List<Zaiko> setZaiko() throws SQLException {
 
+		// SQLステートメント取得
+		Statement st = dba.getStatement();
 
-				// SQLステートメント取得
-				Statement st = dba.getStatement();
+		// SQLの実行
+		String sql = "select hinban, nokori, max from zaiko;";
+		ResultSet rset = st.executeQuery(sql);
 
-				// SQLの実行
-				String sql = "select hinban, nokori, max from zaiko;";
-				ResultSet rset = st.executeQuery(sql);
+		//一時データ
+		List<Zaiko> gendata = new ArrayList<Zaiko>();
 
-				//一時データ
-				List<Zaiko> gendata = new ArrayList<Zaiko>();
+		while (rset.next()) {
 
-				while(rset.next()) {
+			Zaiko hako = new Zaiko();
 
-					Zaiko hako = new Zaiko();
+			hako.setHinban(rset.getInt("hinban"));
+			hako.setNokori(rset.getInt("nokori"));
+			hako.setMax(rset.getInt("max"));
 
-					hako.setHinban(rset.getInt("hinban"));
-					hako.setNokori(rset.getInt("nokori"));
-					hako.setMax(rset.getInt("max"));
-
-					gendata.add(hako);
-				}
-				//リストの上書き
-				data = gendata;
-			}
-
-
+			gendata.add(hako);
+		}
+		//リストの上書き
+		List<Zaiko> data = gendata;
+		return data;
+	}
 
 	/**
 	 * 現・在庫情報をセット(逐一)×
-	 * @param num
-	 * @return hako
 	 * @throws SQLException
 	 */
 	public void genZaiko() throws SQLException {
@@ -75,7 +65,7 @@ public class ZaikoDao {
 
 		List<Zaiko> gendata = new ArrayList<Zaiko>();
 
-		while(rset.next()) {
+		while (rset.next()) {
 
 			Zaiko hako = new Zaiko();
 
@@ -85,35 +75,29 @@ public class ZaikoDao {
 
 			gendata.add(hako);
 		}
-		data = gendata;
+		//		data = gendata;
 	}
-
-
 
 	/**
 	 * 在庫リスト取得
 	 * @return data
 	 */
-	public List<Zaiko> ZaikoList() {
-		return data;
-	}
-
-
+	//	public List<Zaiko> ZaikoList() {
+	//		return data;
+	//	}
 
 	/**
 	 * DBの在庫数を減らす
 	 * @param hinban
-	 * @return zanh
 	 */
 	public void herasuDb(int hinban) throws SQLException {
 
 		// SQLの実行
-//		String sql5 = "select nokori from zaiko where hinban = ?";
-//		PreparedStatement ps = dba.getPreparedStatement(sql5);
-//		ps.setInt(1, hinban);
+		//		String sql5 = "select nokori from zaiko where hinban = ?";
+		//		PreparedStatement ps = dba.getPreparedStatement(sql5);
+		//		ps.setInt(1, hinban);
 
-//		ResultSet rset = ps.executeQuery();
-
+		//		ResultSet rset = ps.executeQuery();
 
 		// SQL作成
 		String sql4 = "UPDATE zaiko SET nokori=nokori-1 WHERE hinban = ?";
@@ -129,23 +113,18 @@ public class ZaikoDao {
 			dba.Rollback();
 			System.out.println("rollback");
 		}
-		return ;
+		return;
 	}
 
-
-
-	private PreparedStatement getPreparedStatement(String sql4) {
-		// TODO 自動生成されたメソッド・スタブ
-		return null;
-	}
-
-
+	//	private PreparedStatement getPreparedStatement(String sql4) {
+	//		 TODO 自動生成されたメソッド・スタブ
+	//		return null;
+	//	}
 
 	/**
 	 * DBの在庫数を増やす
 	 * @param num
-	 * @param selectid
-	 * @return mono.getPrice()
+	 * @param hinban
 	 * @throws SQLException
 	 */
 	public void fuyasuDb(int hinban, int num) throws SQLException {
@@ -165,8 +144,7 @@ public class ZaikoDao {
 			dba.Rollback();
 			System.out.println("rollback");
 		}
-
-		}
-
+		return;
+	}
 
 }

@@ -9,14 +9,12 @@ import main.database.Product;
 
 public class OpenSelectPhase {
 
-	private DatabaseAccess dba ;
+	private DatabaseAccess dba;
 	private Product pro;
 
 	public void setDb(DatabaseAccess dba) {
 		this.dba = dba;
 	}
-
-
 
 	public void setPro(Product pro) {
 		// TODO 自動生成されたメソッド・スタブ
@@ -29,8 +27,8 @@ public class OpenSelectPhase {
 	 */
 	public void Main(int choice) {
 
-		String detail =pro.getData().get(choice-1).getDetail();
-		String comment =pro.getData().get(choice-1).getComment();
+		String detail = pro.getData().get(choice - 1).getDetail();
+		String comment = pro.getData().get(choice - 1).getComment();
 
 		//開封選択画面の表示
 		System.out.println("|1|詳細を見る");
@@ -45,28 +43,27 @@ public class OpenSelectPhase {
 		do {
 			System.out.print("どうしますか？:");
 			try {
-			input = br.readLine();
-			onum = Integer.valueOf(input);
+				input = br.readLine();
+				onum = Integer.valueOf(input);
 
-			if(onum == 1) {
-				//詳細表示
-				System.out.println(detail);
-			}
-			}catch(IOException e1){
+				if (onum == 1) {
+					//詳細表示
+					System.out.println(detail);
+				}
+			} catch (IOException e1) {
 
-			}catch(NumberFormatException e2) {
+			} catch (NumberFormatException e2) {
 				System.out.println("数字で入力してください");
 			}
 
-			}while(onum != 2 && onum != 3);
+		} while (onum != 2 && onum != 3);
 
 		//コメント表示
-		if(onum == 2) {
+		if (onum == 2) {
 			System.out.println(comment);
 		}
 
 		return;
 	}
-
 
 }

@@ -10,7 +10,6 @@ import main.database.Product;
 
 public class AmountInputPhase {
 
-
 	int total;//投入合計
 
 	private Kane kane;
@@ -20,15 +19,11 @@ public class AmountInputPhase {
 		this.kane = kane;
 	}
 
-
-	private Product pro ;
+	private Product pro;
 
 	public void setPro(Product pro) {
 		this.pro = pro;
 	}
-
-
-
 
 	/**
 	 * DBの累計を初期設定
@@ -38,13 +33,15 @@ public class AmountInputPhase {
 		total = kane.getRuikei();
 	}
 
-
 	/**
 	 * 入金
 	 * @param selectid
 	 * @throws SQLException
 	 */
 	public void Main(int selectid) throws SQLException {
+
+		//現在残高の表示
+		System.out.println("現在投入金額は" + total + "円");
 
 		//選択した商品の値段
 		int price = pro.getSelectPrice(selectid);
@@ -65,26 +62,24 @@ public class AmountInputPhase {
 		return;
 	}
 
-
 	/**
 	 * 比較
 	 * @param kakaku
 	 */
-	public void hikaku(int kakaku){
+	public void hikaku(int kakaku) {
 
 		do {
 			ruikei();
 
-		//商品の値段に投入合計が満たない場合
-		if(total < kakaku) {
-			System.out.println("お金が足りません！");
-		}
+			//商品の値段に投入合計が満たない場合
+			if (total < kakaku) {
+				System.out.println("お金が足りません！");
+			}
 
-		}while(total < kakaku);
+		} while (total < kakaku);
 
 		return;
 	}
-
 
 	/**
 	 * 累計計算
@@ -94,29 +89,26 @@ public class AmountInputPhase {
 		System.out.print("入れる金額を入力してください:");
 		try {
 			BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-			String input= br.readLine();//入力値
+			String input = br.readLine();//入力値
 			int amount = Integer.valueOf(input);//入力値
 
-		total += amount;//投入合計
+			total += amount;//投入合計
 
-		}catch(IOException e1){
-			return ;
+		} catch (IOException e1) {
+			return;
 
-		}catch(NumberFormatException e2) {
+		} catch (NumberFormatException e2) {
 			System.out.println("※数字で入力してください");
-			return ;
+			return;
 		}
 
 		//現在投入した金額表示
 		System.out.println("現在投入金額は" + total + "円");
 
-
 		//逐一累計管理に反映
 		kane.imapay(total);
 
-		return ;
+		return;
 	}
-
-
 
 }

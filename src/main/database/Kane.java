@@ -7,13 +7,11 @@ import java.sql.Statement;
 
 public class Kane {
 
-
-	private DatabaseAccess dba ;
+	private DatabaseAccess dba;
 
 	public void setDBA(DatabaseAccess dba) {
 		this.dba = dba;
 	}
-
 
 	//フィールド変数
 	private Integer ruikei;//投入累計額
@@ -26,14 +24,12 @@ public class Kane {
 		this.ruikei = ruikei;
 	}
 
-
 	/**
 	 * 投入金額をDBから取得
 	 * @param selectid
 	 * @return mono.getPrice()
 	 */
 	public void getDbRuikei() throws SQLException {
-
 
 		// SQL文
 		String sql3 = "select ruikei from kane";
@@ -43,10 +39,9 @@ public class Kane {
 		// SQLの実行
 		ResultSet rset = st.executeQuery(sql3);
 
-
 		Kane hako = new Kane();
 
-		while(rset.next()) {
+		while (rset.next()) {
 
 			hako.setRuikei(rset.getInt("ruikei"));
 
@@ -64,7 +59,6 @@ public class Kane {
 		// TODO 自動生成されたメソッド・スタブ
 		ruikei = total1;
 	}
-
 
 	/**
 	 * DBに累計更新（最後）

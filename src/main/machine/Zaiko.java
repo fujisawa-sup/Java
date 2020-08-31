@@ -10,7 +10,6 @@ import main.database.ZaikoDao;
 
 public class Zaiko {
 
-
 	private ZaikoDao zdao;
 
 	public void setZDAO(ZaikoDao zdao) {
@@ -23,49 +22,51 @@ public class Zaiko {
 	private int nokori;//在庫数
 	private int max;//最大在庫数
 
-
 	public int getHinban() {
 		return hinban;
 	}
+
 	public void setHinban(int hinban) {
 		this.hinban = hinban;
 	}
+
 	public int getNokori() {
 		return nokori;
 	}
+
 	public void setNokori(int nokori) {
 		this.nokori = nokori;
 	}
+
 	public int getMax() {
 		return max;
 	}
+
 	public void setMax(int max) {
 		this.max = max;
 	}
 
-
 	//在庫情報のリスト
 	List<Zaiko> danball;
 
-
 	/**
 	 * 在庫リスト取得
+	 * @return danball
 	 * @return zdao.ZaikoList()
 	 */
 	public List<Zaiko> getZaiko() throws SQLException {
-		danball = zdao.ZaikoList();
+		danball = zdao.setZaiko();
 		return danball;
 	}
 
 	/**
-	 * 売切表示用のnokori取得
+	 * 売切表示用のnokori取得×
 	 * @param a
 	 * @return danball.get(a).getNokori()
 	 * @throws SQLException
 	 */
 	public int kakuNokori(int a) throws SQLException {
 		//現・在庫状態の取得
-		zdao.setZaiko();
 		getZaiko();
 		return danball.get(a).getNokori();
 	}
@@ -75,10 +76,11 @@ public class Zaiko {
 	 * @param choice
 	 * @return kazu
 	 */
-	public int senzai(int choice){
+	public int senzai(int choice) {
+		//選択商品の在庫数
 		int kazu = 0;
 		//hinbanとidが一致するリスト要素を探索
-		for (int i = 0 ; i < danball.size() ; i++) {
+		for (int i = 0; i < danball.size(); i++) {
 
 			//hinbanとidが一致したら在庫数を設定
 			if (danball.get(i).getHinban() == choice) {
@@ -96,7 +98,7 @@ public class Zaiko {
 	public Zaiko selectZaiko(int id) {
 		Zaiko case1 = null;
 		//hinbanとidが一致するリスト要素を探索
-		for (int i = 0 ; i < danball.size() ; i++) {
+		for (int i = 0; i < danball.size(); i++) {
 
 			//hinbanとidが一致したら在庫情報を設定
 			if (danball.get(i).getHinban() == id) {
@@ -105,8 +107,6 @@ public class Zaiko {
 		}
 		return case1;
 	}
-
-
 
 	/**
 	 * DBの在庫有無
@@ -120,21 +120,17 @@ public class Zaiko {
 		int umu = 0;
 
 		//現・在庫状態の取得
-		zdao.setZaiko();
 		getZaiko();
 
 		//選択した商品の在庫数
 		int ima = senzai(id);
-	//在庫が0以下
-	if (ima < 0) {
-
-		System.out.println("売切れです");
-		umu = -1;
+		//在庫が0以下
+		if (ima < 1) {
+			//在庫がない
+			umu = -1;
+		}
+		return umu;
 	}
-	return umu;
-	}
-
-
 
 	/**
 	 * DBの在庫数を減らす
@@ -147,9 +143,6 @@ public class Zaiko {
 		return;
 	}
 
-
-
-
 	/**
 	 * DBの在庫数を増やす
 	 * @param id
@@ -157,9 +150,6 @@ public class Zaiko {
 	 */
 	public void fuya(int id) throws SQLException {
 
-		//現・在庫状態の取得
-		zdao.setZaiko();
-		getZaiko();
 		//選択した在庫情報のリスト
 		Zaiko cases = selectZaiko(id);
 
@@ -172,45 +162,43 @@ public class Zaiko {
 		//差が0より大きい
 		if (sa > 0) {
 
-			System.out.println("可能補充数は"+ sa + "個です");
+			System.out.println("可能補充数は" + sa + "個です");
 
-		//補充数の入力
-		String inp;
-		int num = 0;
+			//補充数の入力
+			String inp;
+			int num = 0;
 
-		do {
-			System.out.print("いくつ補充しますか？:");
-			try {
-			BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-			inp = br.readLine();
-			num = Integer.valueOf(inp);
-			}catch(IOException e1){
+			do {
+				System.out.print("いくつ補充しますか？:");
+				try {
+					BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+					inp = br.readLine();
+					num = Integer.valueOf(inp);
+				} catch (IOException e1) {
 
-			}catch(NumberFormatException e2) {
-				System.out.println("※数字で入力してください");
-			}
+				} catch (NumberFormatException e2) {
+					System.out.println("※数字で入力してください");
+				}
 
-			if (num < 0 || num > sa) {
-				System.out.println("※補充できません※");
-				System.out.println("可能補充数の範囲内で入力してください");
-			}
+				if (num < 0 || num > sa) {
+					System.out.println("※補充できません※");
+					System.out.println("可能補充数の範囲内で入力してください");
+				}
 
-		}while(num < 0 || num > sa);
+			} while (num < 0 || num > sa);
 
-		//補充
+			//補充
 
-		num += zann;
+			num += zann;
 
-		zdao.fuyasuDb(id,num);
+			zdao.fuyasuDb(id, num);
 
-		System.out.println("在庫は" + num + "個");
+			System.out.println("在庫は" + num + "個");
 
-		}else {
+		} else {
 			System.out.println("補充出来ません");
 		}
-
 
 	}
 
 }
-

@@ -8,9 +8,9 @@ import java.util.List;
 
 import main.database.Product;
 
-public class ProductSelectPhase{
+public class ProductSelectPhase {
 
-	private Product pro ;
+	private Product pro;
 
 	public void setPro(Product pro) {
 		this.pro = pro;
@@ -24,10 +24,9 @@ public class ProductSelectPhase{
 	//引数あり（pspに引数）のパターン
 	public ProductSelectPhase(Product pro) {
 		// TODO 自動生成されたコンストラクター・スタブ
-//		 pro = pro;
+		//		 pro = pro;
 		this.setPro(pro);
 	}
-
 
 	private Zaiko zai;
 
@@ -36,27 +35,25 @@ public class ProductSelectPhase{
 		this.zai = zai;
 	}
 
-
 	//商品情報のリスト
-	List<Product> rist;
+	List<Product> ristP;
 
+	//在庫情報のリスト
+	List<Zaiko> ristZ;
 
 	public int main() throws SQLException {
 
 		//商品情報のリスト
-		rist = pro.getData();
+		ristP = pro.getData();
 
+		//リスト表示
+		showlist();
 
-	//リスト表示
-	showlist();
+		//選択された商品番号
+		int select = sentaku();
 
-	//選択された商品番号
-	int select = sentaku();
-
-	return select;
+		return select;
 	}
-
-
 
 	/**
 	 * リスト表示
@@ -66,25 +63,40 @@ public class ProductSelectPhase{
 
 		String urikire;//売切文言
 
-		//カウンタ
-		int i = 0;
+		//在庫情報のリスト取得
+		ristZ = zai.getZaiko();
 
-		for (Product a : rist) {
+		//商品番号（１～）
+		int id = 1;
 
-				//在庫が0以下なら売切表示を追加
-				if (zai.kakuNokori(i) < 1) {
-					urikire = "|売切";
-				}else {
-					urikire = "";
+		//商品情報の数だけループ
+		for (Product a : ristP) {
+
+			//一致する在庫情報
+			Zaiko kazu = null;
+			//hinbanとidが一致するリスト要素を探索
+			for (int i1 = 0; i1 < ristZ.size(); i1++) {
+
+				//hinbanとidが一致したら在庫情報を設定
+				if (ristZ.get(i1).getHinban() == id) {
+					kazu = ristZ.get(i1);
 				}
-				//リストの表示
-				System.out.println("|"+ a.getId() +"|"+a.getName()+"|"+ a.getPrice() + "円"+ urikire);
 
-			i++;//インクリメント
+			}
+			id++;
+
+			//在庫が0以下なら売切表示を追加
+			if (kazu.getNokori() < 1) {
+				urikire = "|売切";
+			} else {
+				urikire = "";
+			}
+			//リストの表示
+			System.out.println("|" + a.getId() + "|" + a.getName() + "|" + a.getPrice() + "円" + urikire);
+
 		}
 
 	}
-
 
 	/**
 	 * 商品選択
@@ -94,7 +106,6 @@ public class ProductSelectPhase{
 	 */
 	public int sentaku() throws SQLException {
 
-
 		String input;//入力値
 		int pnum = 0;//選択値
 
@@ -102,18 +113,17 @@ public class ProductSelectPhase{
 		do {
 			System.out.print("商品を選択してください:");
 			try {
-			BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-			input = br.readLine();
-			pnum = Integer.valueOf(input);
-			}catch(IOException e1){
-			}catch(NumberFormatException e2) {
+				BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+				input = br.readLine();
+				pnum = Integer.valueOf(input);
+			} catch (IOException e1) {
+			} catch (NumberFormatException e2) {
 				System.out.println("※数字で入力してください");
 			}
-		}while(pnum < 1 || pnum > rist.size());
+		} while (pnum < 1 || pnum > ristP.size());
 
 		return pnum;
 	}
-
 
 	/**
 	 * 選択した商品の在庫数を取得
